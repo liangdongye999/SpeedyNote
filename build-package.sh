@@ -164,7 +164,7 @@ get_dependencies() {
     local format=$1
     case $format in
         deb)
-            echo "libqt6core6t64 | libqt6core6, libqt6gui6t64 | libqt6gui6, libqt6widgets6t64 | libqt6widgets6, libpoppler-qt6-3t64 | libpoppler-qt6-3, libsdl2-2.0-0, libasound2"
+            echo "libqt6core6t64 | libqt6core6, libqt6gui6t64 | libqt6gui6, libqt6widgets6t64 | libqt6widgets6, libpoppler-qt6-3t64 | libpoppler-qt6-3, libsdl2-2.0-0, libasound2 | devscripts"
             ;;
         rpm)
             echo "qt6-qtbase, poppler-qt6, SDL2, alsa-lib"
