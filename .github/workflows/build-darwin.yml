@@ -2,11 +2,8 @@ name: Build SpeedyNote DMG Packages
 
 on:
   push:
-    branches: ['main']
-  pull_request:
-    branches: ['main']
-  release:
-    types: [ created ]
+    tags:
+      - "v*"
 
 jobs:
   build-dmg:
