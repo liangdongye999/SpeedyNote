@@ -4,7 +4,7 @@ WORKDIR /SpeedyNote
 
 COPY . /SpeedyNote
 
-RUN apt update -y && apt install -y cmake make pkg-config qt6-base-dev libqt6gui6t64 libqt6gui6 libqt6widgets6t64 libqt6widgets6 qt6-tools-dev libpoppler-qt6-dev libsdl2-dev libasound2-dev
+RUN apt update -y && apt install -y cmake make pkg-config qt6-base-dev libqt6gui6t64 libqt6gui6 libqt6widgets6t64 libqt6widgets6 qt6-tools-dev libpoppler-qt6-dev libsdl2-dev libasound2-dev devscripts
 
 RUN ./build-package.sh -deb && find -name "*.deb" -exec mv {} . \;
 
