@@ -1,32 +1,35 @@
-# 使用Ubuntu 24.04作为基础镜像
-FROM ubuntu:24.04
+FROM ubuntu AS Ubuilder
 
-# 设置环境变量
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=UTC
+WORKDIR /SpeedyNote
 
-# 安装构建依赖项
-RUN apt-get update && apt-get install -y \
-    cmake \
-    make \
-    pkg-config \
-    qt6-base-dev \
-    qt6-tools-dev \
-    libpoppler-qt6-dev \
-    libsdl2-dev \
-    libasound2-dev \
-    dpkg-dev \
-    devscripts \
-    qemu-user-static
+COPY . /SpeedyNote
 
-# 创建工作目录
-WORKDIR /app
+RUN apt update -y && apt install -y cmake make pkg-config qt6-base-dev libqt6gui6t64 libqt6gui6 libqt6widgets6t64 libqt6widgets6 qt6-tools-dev libpoppler-qt6-dev libsdl2-dev libasound2-dev
 
-# 复制项目文件
-COPY . .
+RUN ./build-package.sh && find -name "*.deb" -exec mv {} . \;
 
-# 设置执行权限
-RUN chmod +x ./build-package.sh ./build-alpine-arm64.sh
+FROM fedora AS Fbuilder
 
-# 构建项目
-RUN ./build-package.sh --deb
+WORKDIR /SpeedyNote
+
+COPY . /SpeedyNote
+
+RUN dnf update -y && dnf install -y cmake make pkgconf qt6-qtbase-devel qt6-qttools-devel poppler-qt6-devel SDL2-devel alsa-lib-devel
+
+RUN ./build-package.sh && find -name "*.rpm" -exec mv {} . \;
+
+FROM archlinux AS Abuilder
+
+WORKDIR /SpeedyNote
+
+COPY . /SpeedyNote
+
+RUN pacman -Sy cmake make pkgconf qt6-base qt6-tools poppler-qt6 sdl2-compat alsa-lib
+
+RUN ./build-package.sh && find -name "*.pkgx" -exec mv {} . \;
+
+FROM scratch AS Packer
+
+COPY --from=Ubuilder /SpeedyNote/*.deb /
+COPY --from=Fbuilder /SpeedyNote/*.rpm /
+COPY --from=Abuilder /SpeedyNote/*.pkgx /
