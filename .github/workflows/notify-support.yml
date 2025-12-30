@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Send Tag Release Notification to ntfy.sh
         run: |
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
-          RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/$TAG_NAME"
-          MESSAGE="$TAG_NAME 新版本发布，详细见 $RELEASE_URL"
-          curl -d "$MESSAGE" https://ntfy.sh/SpeedyNote
+          # TAG_NAME="${GITHUB_REF#refs/tags/}"
+          # RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/$TAG_NAME"
+          # MESSAGE="$TAG_NAME 新版本发布，详细见 $RELEASE_URL"
+          # curl -d "$MESSAGE" https://ntfy.sh/SpeedyNote
