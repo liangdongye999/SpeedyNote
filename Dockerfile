@@ -18,18 +18,7 @@ RUN dnf update -y && dnf install -y cmake make pkgconf qt6-qtbase-devel qt6-qtto
 
 RUN ./build-package.sh && find -name "*.rpm" -exec mv {} . \;
 
-FROM archlinux AS Abuilder
-
-WORKDIR /SpeedyNote
-
-COPY . /SpeedyNote
-
-RUN pacman -Sy cmake make pkgconf qt6-base qt6-tools poppler-qt6 sdl2-compat alsa-lib
-
-RUN ./build-package.sh && find -name "*.pkgx" -exec mv {} . \;
-
 FROM scratch AS Packer
 
 COPY --from=Ubuilder /SpeedyNote/*.deb /
 COPY --from=Fbuilder /SpeedyNote/*.rpm /
-COPY --from=Abuilder /SpeedyNote/*.pkgx /
